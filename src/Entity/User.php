@@ -55,7 +55,10 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         minMessage: 'Password must be at least {{ limit }} characters long.',
         groups: ['user:create', 'user:password_update']
     )]
-    #[Assert\Regex(['pattern' => "/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/"])]
+    #[Assert\Regex(
+        pattern: '/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/'
+    )]
+
 
     private ?string $password = null;
 
@@ -70,7 +73,10 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         minMessage: 'New Password must be at least {{ limit }} characters long.',
         groups: ['user:password_update']
     )]
-    #[Assert\Regex(['pattern' => "/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/"])]
+    #[Assert\Regex(
+        pattern: '/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/'
+    )]
+
 
     private ?string $plainPassword = null;
 

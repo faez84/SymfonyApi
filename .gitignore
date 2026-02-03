@@ -16,3 +16,8 @@
 /phpqa/vendor/
 # Added by ggshield
 .cache_ggshield
+
+###> phpunit/phpunit ###
+/phpunit.xml
+/.phpunit.cache/
+###< phpunit/phpunit ###
