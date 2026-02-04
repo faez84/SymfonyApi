@@ -51,24 +51,12 @@ jobs:
       - name: Install dependencies
         run: composer install --no-interaction --prefer-dist --no-progress
 
-      - name: Wait for MySQL DNS + port
-        shell: bash
-        run: |
-          for i in {1..30}; do
-            (getent hosts mysql && (echo > /dev/tcp/mysql/3306)) >/dev/null 2>&1 && exit 0
-            echo "Waiting for mysql..."
-            sleep 2
-          done
-          echo "MySQL not reachable"
-          exit 1
-
       - name: Generate JWT keys (only if tests require it)
         run: php bin/console lexik:jwt:generate-keypair --skip-if-exists
 
-      - name: Create DB + migrate
+      - name: Execute tests (Unit and Feature tests) via PHPUnit
+        env:
+          DATABASE_URL:  mysql://root:@127.0.0.1:3306/api_test
         run: |
-          php bin/console doctrine:database:create --if-not-exists --no-interaction
-          php bin/console doctrine:migrations:migrate --no-interaction
-
-      - name: Run PHPUnit
-        run: vendor/bin/phpunit
+          php bin/console --no-interaction doctrine:migrations:migrate
+          vendor/bin/phpunit
