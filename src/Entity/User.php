@@ -82,8 +82,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?string $newPassword = null;
 
     #[Assert\Expression(
-        "this.getNewPassword() === null or this.getPasswordConfirmation() === this.getNewPassword()",
-        message: "Password confirmation does not match.",
+        'this.getNewPassword() === null or this.getPasswordConfirmation() === this.getNewPassword()',
+        message: 'Password confirmation does not match.',
         groups: ['user:password_update']
     )]
     #[Groups(['user:password_update'])]

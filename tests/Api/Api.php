@@ -9,7 +9,7 @@ use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 class Api extends WebTestCase
 {
-    protected $client = null;
+    protected ?KernelBrowser $client = null;
     protected EntityManagerInterface $em;
 
     private const TEST_USER_EMAIL = 'testuser@example.com';
@@ -38,7 +38,7 @@ class Api extends WebTestCase
         parent::tearDown();
     }
     
-    public function getToken()
+    public function getToken(): mixed
     {
         $this->client->request('POST', '/api/login_check', [], [], [
             'CONTENT_TYPE' => 'application/json',
@@ -53,7 +53,7 @@ class Api extends WebTestCase
         return $data['token'] ?? null;
     }
 
-    public function createUser()
+    public function createUser(): void
     {
         $user = $this->em->getRepository(User::class)->findOneBy(['email' => self::TEST_USER_EMAIL]);
         if (!$user) {
@@ -75,7 +75,7 @@ class Api extends WebTestCase
         }   
     }
 
-    public function createAdminUser()
+    public function createAdminUser(): void
     {
         $admin = $this->em->getRepository(User::class)->findOneBy(['email' => self::TEST_USER_ADMIN_EMAIL]);
         if (!$admin) {

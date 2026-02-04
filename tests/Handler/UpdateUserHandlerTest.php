@@ -41,7 +41,8 @@ class UpdateUserHandlerTest extends TestCase
     {
         $userId = 1;
         $repo = $this->createStub(EntityRepository::class);
-        $repo->method('find')->with($userId)->willReturn(null);
+
+        $repo->method('find')->willReturn(null);
 
         $em = $this->createMock(EntityManagerInterface::class);
         $em->method('getRepository')->with(User::class)->willReturn($repo);
