@@ -24,11 +24,11 @@ jobs:
           --health-cmd="mysqladmin ping -h 127.0.0.1 -uroot -proot"
           --health-interval=10s
           --health-timeout=5s
-          --health-retries=10
+          --health-retries=20
 
     env:
       APP_ENV: test
-      DATABASE_URL: mysql://root:@mysql:3306/api_test?serverVersion=8.0
+      DATABASE_URL: mysql://root:root@mysql:3306/api_test?serverVersion=8.0
 
     steps:
       - name: Checkout
@@ -44,28 +44,30 @@ jobs:
       - name: Cache Composer
         uses: actions/cache@v4
         with:
-          path: |
-            ~/.composer/cache
+          path: ~/.composer/cache
           key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-composer-
+          restore-keys: ${{ runner.os }}-composer-
 
       - name: Install dependencies
-        env:
-          DB_CONNECTION: mysql
-          DB_HOST: 127.0.0.1
-          DB_DATABASE: api_test
-          DB_PORT: 3306
-          DB_USER: root
-          DATABASE_URL: mysql://root:@127.0.0.1:3306/api_test?serverVersion=8.0
         run: composer install --no-interaction --prefer-dist --no-progress
+
+      - name: Wait for MySQL DNS + port
+        shell: bash
+        run: |
+          for i in {1..30}; do
+            (getent hosts mysql && (echo > /dev/tcp/mysql/3306)) >/dev/null 2>&1 && exit 0
+            echo "Waiting for mysql..."
+            sleep 2
+          done
+          echo "MySQL not reachable"
+          exit 1
 
       - name: Generate JWT keys (only if tests require it)
         run: php bin/console lexik:jwt:generate-keypair --skip-if-exists
 
-      - name: Create DB (if needed) + migrate
+      - name: Create DB + migrate
         run: |
-          php bin/console doctrine:database:create --if-not-exists
+          php bin/console doctrine:database:create --if-not-exists --no-interaction
           php bin/console doctrine:migrations:migrate --no-interaction
 
       - name: Run PHPUnit
