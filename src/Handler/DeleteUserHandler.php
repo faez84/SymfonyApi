@@ -12,7 +12,6 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 final class DeleteUserHandler implements DeleteUserHandlerInterface
 {
     public function __construct(
-        private UserRepository $users,
         private EntityManagerInterface $em
     ) {
     }

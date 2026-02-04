@@ -14,7 +14,6 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 final class ChangePasswordUserHandler implements ChangePasswordUserHandlerInterface
 {
     public function __construct(
-        private UserRepository $users,
         private EntityManagerInterface $em,
         private UserPasswordHasherInterface $passwordHasher
     ) {
@@ -31,7 +30,7 @@ final class ChangePasswordUserHandler implements ChangePasswordUserHandlerInterf
             throw new UnprocessableEntityHttpException('Password is not correct');
         }
 
-        $hashedPass = $this->passwordHasher->hashPassword($user, $input->getPlainPassword());
+        $hashedPass = $this->passwordHasher->hashPassword($user, $input->getNewPassword());
         $user->setPassword($hashedPass);
         $this->em->flush();
 

@@ -68,8 +68,6 @@ class UserApiController extends AbstractController
     #[IsGranted('ROLE_ADMIN')]
     public function updateUser(Request $request, int $id): JsonResponse
     {
-
-
         $serializedUser = $this->deserializeOr400($request->getContent(), User::class, ['groups' => ['user:update']]);
 
         $errors = $this->validateOr422($serializedUser, ['user:update']);
@@ -89,10 +87,10 @@ class UserApiController extends AbstractController
         $serializedUser = $this->deserializeOr400(
             $request->getContent(),
             User::class,
-            ['groups' => ['password_update']]
+            ['groups' => ['user:password_update']]
         );
 
-        $errors = $this->validateOr422($serializedUser, ['password_update']);
+        $errors = $this->validateOr422($serializedUser, ['user:password_update']);
         if ($errors) {
             return $this->json(['errors' => $errors], Response::HTTP_UNPROCESSABLE_ENTITY);
         }

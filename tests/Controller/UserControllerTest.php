@@ -1,0 +1,70 @@
+<?php
+
+namespace App\Tests\Controller;
+
+use App\Tests\Api\Api;
+use Symfony\Component\HttpFoundation\Response;
+
+class UserControllerTest extends Api
+{
+    public function testAddUserForbidden(): void
+    {
+        $this->client->request('POST', '/api/users', [], [], [
+            'HTTP_ACCEPT' => 'application/json'],
+            json_encode([
+                'email' => 'test@email',
+                'password' => 'testpassword',
+            ])
+        );
+
+        $this->assertResponseStatusCodeSame(Response::HTTP_UNAUTHORIZED);
+        $this->assertResponseHeaderSame('Content-Type', 'application/json');
+    }
+    public function testAddUserInvalid(): void
+    {
+        $token = $this->getToken();
+        $this->client->request('POST', '/api/users', [], [], [
+            'HTTP_ACCEPT' => 'application/json',
+            'HTTP_AUTHORIZATION' => 'Bearer '.$token,
+            'CONTENT_TYPE' => 'application/json',
+        ], json_encode([
+            'email' => '@email',
+            'password' => 'ww',
+        ]));
+
+
+        $this->assertResponseStatusCodeSame(Response::HTTP_UNPROCESSABLE_ENTITY);
+        $this->assertResponseHeaderSame('Content-Type', 'application/json');
+        
+        $this->assertJson($this->client->getResponse()->getContent());
+
+        $data = json_decode($this->client->getResponse()->getContent() ?? '', true);
+        $this->assertIsArray($data);
+
+        $this->assertTrue(
+            isset($data['violations']) || isset($data['errors']) || isset($data['detail']),
+            'Expected a validation error payload (violations/errors/detail).'
+        );
+    }
+
+    public function testAddUserSuccess(): void
+    {
+        $token = $this->getToken();
+        $this->client->request('POST', '/api/users', [], [], [
+            'HTTP_ACCEPT' => 'application/json',
+            'HTTP_AUTHORIZATION' => 'Bearer '.$token,
+            'CONTENT_TYPE' => 'application/json',
+        ], json_encode([
+            'email' => 'test@example.com',
+            'password' => '111111cxx',
+        ]));
+        $this->assertResponseIsSuccessful();
+        $this->assertResponseHeaderSame('Content-Type', 'application/json');
+        $data = json_decode($this->client->getResponse()->getContent() ?? '', true);
+        $this->assertIsArray($data);
+        $this->assertArrayHasKey('status', $data);
+        $this->assertArrayHasKey('id', $data);
+        
+        $this->deleteUserWithEmail('test@example.com');
+    }
+}
