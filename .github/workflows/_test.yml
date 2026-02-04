@@ -11,7 +11,7 @@ permissions:
   contents: read
 defaults:
  run:
-  working-directory: ./app
+  working-directory: .
 
 jobs:
   InitTest:
