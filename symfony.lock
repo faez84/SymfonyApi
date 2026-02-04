@@ -38,9 +38,6 @@
     "faez84/doctrine-performance-guard-bundle": {
         "version": "v1.0.3"
     },
-    "faez84/problem-details-bundle": {
-        "version": "v2.2.2"
-    },
     "lexik/jwt-authentication-bundle": {
         "version": "3.2",
         "recipe": {
