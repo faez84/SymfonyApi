@@ -28,7 +28,7 @@ jobs:
 
     env:
       APP_ENV: test
-      DATABASE_URL: mysql://root:@mysql:3306/api_test
+      DATABASE_URL: mysql://root:@mysql:3306/api_test?serverVersion=8.0
 
     steps:
       - name: Checkout
@@ -57,7 +57,7 @@ jobs:
           DB_DATABASE: api_test
           DB_PORT: 3306
           DB_USER: root
-          DATABASE_URL: mysql://root:@127.0.0.1:3306/api_test
+          DATABASE_URL: mysql://root:@127.0.0.1:3306/api_test?serverVersion=8.0
         run: composer install --no-interaction --prefer-dist --no-progress
 
       - name: Generate JWT keys (only if tests require it)
