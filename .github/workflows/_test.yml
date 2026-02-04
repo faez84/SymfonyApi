@@ -28,7 +28,7 @@ jobs:
 
     env:
       APP_ENV: test
-      DATABASE_URL: mysql://root:root@mysql:3306/api_test
+      DATABASE_URL: mysql://root:@mysql:3306/api_test
 
     steps:
       - name: Checkout
@@ -54,7 +54,7 @@ jobs:
         env:
           DB_CONNECTION: mysql
           DB_HOST: 127.0.0.1
-          DB_DATABASE: api
+          DB_DATABASE: api_test
           DB_PORT: 3306
           DB_USER: root
           DATABASE_URL: mysql://root:@127.0.0.1:3306/api_test
