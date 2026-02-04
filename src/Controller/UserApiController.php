@@ -23,9 +23,9 @@ use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Component\Serializer\Exception\NotEncodableValueException;
 use Symfony\Component\Serializer\SerializerInterface;
-use Symfony\Component\Validator\Validator\ValidatorInterface;
-use Symfony\Component\Validator\ConstraintViolationListInterface;
 use Symfony\Component\Validator\ConstraintViolationInterface;
+use Symfony\Component\Validator\ConstraintViolationListInterface;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class UserApiController extends AbstractController
 {
@@ -130,7 +130,10 @@ class UserApiController extends AbstractController
     {
         return $this->json($user, Response::HTTP_OK, [], ['groups' => ['user:list']]);
     }
-
+    
+    /**
+     * @param array<string, mixed> $context
+     */
     private function deserializeOr400(string $json, string $class, array $context = []): object
     {
         try {
@@ -149,6 +152,10 @@ class UserApiController extends AbstractController
         return $data;
     }
 
+    /**
+     * @param array<int, string> $groups
+     * @return array<string, array<int, string>>
+     */
     private function validateOr422(object $data, array $groups = []): array
     {
         /** @var ConstraintViolationListInterface $violations */

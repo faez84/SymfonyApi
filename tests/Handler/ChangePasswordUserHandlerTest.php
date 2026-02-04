@@ -13,7 +13,7 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 class ChangePasswordUserHandlerTest extends TestCase
 {
-    public function testHandle()
+    public function testHandle(): void
     {
         $userId = 1;
         $password = '111' ;
@@ -53,7 +53,7 @@ class ChangePasswordUserHandlerTest extends TestCase
         $handler->handle($userId, $user);
     }
 
-    public function testHandleWithNotFoundHttpException()
+    public function testHandleWithNotFoundHttpException(): void
     {
         $userId = 1;
 
@@ -78,7 +78,7 @@ class ChangePasswordUserHandlerTest extends TestCase
         $handler->handle($userId, new User());
     }
 
-    public function testHandleWithUnprocessableEntityHttpException()
+    public function testHandleWithUnprocessableEntityHttpException(): void
     {
         $userId = 1;
         $password = '111' ;

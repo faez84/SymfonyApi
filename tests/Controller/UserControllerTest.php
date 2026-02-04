@@ -38,7 +38,7 @@ class UserControllerTest extends Api
         
         $this->assertJson($this->client->getResponse()->getContent());
 
-        $data = json_decode($this->client->getResponse()->getContent() ?? '', true);
+        $data = json_decode((string) $this->client->getResponse()->getContent(), true);
         $this->assertIsArray($data);
 
         $this->assertTrue(
@@ -60,7 +60,7 @@ class UserControllerTest extends Api
         ]));
         $this->assertResponseIsSuccessful();
         $this->assertResponseHeaderSame('Content-Type', 'application/json');
-        $data = json_decode($this->client->getResponse()->getContent() ?? '', true);
+        $data = json_decode((string) $this->client->getResponse()->getContent(), true);
         $this->assertIsArray($data);
         $this->assertArrayHasKey('status', $data);
         $this->assertArrayHasKey('id', $data);

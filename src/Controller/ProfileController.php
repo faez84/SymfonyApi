@@ -64,6 +64,5 @@ class ProfileController extends AbstractController
         $this->uploadUserPhotoHandler->handle($user->getId(), $filename);
 
         return $this->json(['message' => 'Photo uploaded successfully'], Response::HTTP_OK);
-
     }
 }

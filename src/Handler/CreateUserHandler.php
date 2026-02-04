@@ -15,7 +15,7 @@ final class CreateUserHandler implements CreateUserHandlerInterface
     public function __construct(
         private UserRepository $users,
         private EntityManagerInterface $em,
-        private UserPasswordHasherInterface $hasher,
+        private UserPasswordHasherInterface $hasher
     ) {
     }
 

@@ -40,7 +40,7 @@ class ProfileControllerTest extends Api
         $this->assertResponseIsSuccessful();
         $this->assertResponseHeaderSame('content-type', 'application/json');
 
-        $data = json_decode($this->client->getResponse()->getContent() ?? '', true);
+        $data = json_decode((string) $this->client->getResponse()->getContent(), true);
         $this->assertIsArray($data);
 
         $this->assertArrayHasKey('email', $data);
