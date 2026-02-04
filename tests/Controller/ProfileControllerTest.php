@@ -13,8 +13,8 @@ class ProfileControllerTest extends Api
             'HTTP_ACCEPT' => 'application/json',
         ]);
 
-        $this->assertResponseStatusCodeSame(Response::HTTP_FORBIDDEN);
-        $this->assertResponseHeaderSame('Content-Type', 'application/problem+json');
+        $this->assertResponseStatusCodeSame(Response::HTTP_UNAUTHORIZED);
+        $this->assertResponseHeaderSame('Content-Type', 'application/json');
     }
 
     public function testGetUserProfileUnauthorizedWhenNoToken(): void
