@@ -130,7 +130,6 @@ class UserApiController extends AbstractController
     {
         return $this->json($user, Response::HTTP_OK, [], ['groups' => ['user:list']]);
     }
-    
     /**
      * @param array<string, mixed> $context
      */
