@@ -51,6 +51,13 @@ jobs:
             ${{ runner.os }}-composer-
 
       - name: Install dependencies
+        env:
+          DB_CONNECTION: mysql
+          DB_HOST: 127.0.0.1
+          DB_DATABASE: api
+          DB_PORT: 3306
+          DB_USER: root
+          DATABASE_URL: mysql://root:@127.0.0.1:3306/api_test
         run: composer install --no-interaction --prefer-dist --no-progress
 
       - name: Generate JWT keys (only if tests require it)
