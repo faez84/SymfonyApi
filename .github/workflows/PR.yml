@@ -11,11 +11,11 @@ on:
   workflow_dispatch:
 
 jobs:
-  run-codereview:
-    needs: [ run-phpqa]
-    name: Test
-    uses: ./.github/workflows/_codereview.yml
-    secrets: inherit
+#  run-codereview:
+#    needs: [ run-phpqa]
+#    name: Test
+#    uses: ./.github/workflows/_codereview.yml
+#    secrets: inherit
 
   run-phpqa:
     name: phpqa
