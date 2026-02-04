@@ -7,12 +7,11 @@ namespace App\Handler;
 use App\Entity\User;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 final class UpdateUserHandler implements UpdateUserHandlerInterface
 {
     public function __construct(
-        private UserRepository $users,
         private EntityManagerInterface $em
     ) {
     }
@@ -21,7 +20,7 @@ final class UpdateUserHandler implements UpdateUserHandlerInterface
     {
         $user = $this->em->getRepository(User::class)->find($id);
         if (!$user) {
-            throw new \Symfony\Component\HttpKernel\Exception\NotFoundHttpException('User not found');
+            throw new NotFoundHttpException('User not found');
         }
         $user->setEmail($input->getEmail());
         $this->em->flush();

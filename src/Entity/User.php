@@ -6,6 +6,7 @@ namespace App\Entity;
 
 use App\Repository\UserRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Serializer\Attribute\Groups;
@@ -64,7 +65,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[Groups(['user:password_update'])]
     #[Assert\NotBlank(
-        message: 'plainPassword is required.',
+        message: 'newPassword is required.',
         groups: ['user:password_update']
     )]
     #[Assert\Length(
@@ -78,10 +79,10 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     )]
 
 
-    private ?string $plainPassword = null;
+    private ?string $newPassword = null;
 
     #[Assert\Expression(
-        "this.getPlainPassword() === null or this.getPasswordConfirmation() === this.getPlainPassword()",
+        "this.getNewPassword() === null or this.getPasswordConfirmation() === this.getNewPassword()",
         message: "Password confirmation does not match.",
         groups: ['user:password_update']
     )]
@@ -91,9 +92,17 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         groups: ['user:password_update']
     )]
     private ?string $passwordConfirmation = null;
-
+    #[Groups(['user:list', 'user:profile'])]
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $photo = null;
+
+    #[Assert\File(
+        maxSize: '2M',
+        mimeTypes: ['image/jpeg', 'image/png', 'image/webp', 'image/gif'],
+        mimeTypesMessage: 'Please upload a valid image file.'
+    )]
+    private ?UploadedFile $photoFile = null;
+
     public function getPasswordConfirmation(): ?string
     {
         return $this->passwordConfirmation;
@@ -104,14 +113,14 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function getPlainPassword(): ?string
+    public function getNewPassword(): ?string
     {
-        return $this->plainPassword;
+        return $this->newPassword;
     }
 
-    public function setPlainPassword(?string $plainPassword): static
+    public function setNewPassword(?string $newPassword): static
     {
-        $this->plainPassword = $plainPassword;
+        $this->newPassword = $newPassword;
 
         return $this;
     }
@@ -206,6 +215,16 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         $this->photo = $photo;
 
+        return $this;
+    }
+
+    public function getPhotoFile(): ?UploadedFile
+    {
+        return $this->photoFile;
+    }
+    public function setPhotoFile(?UploadedFile $file): self
+    {
+        $this->photoFile = $file;
         return $this;
     }
 }
