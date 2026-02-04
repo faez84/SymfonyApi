@@ -23,14 +23,14 @@ jobs:
     runs-on: ubuntu-latest
     env:
       APP_ENV: test
-      DATABASE_URL: mysql://root:root@127.0.0.1:3306/api_test?serverVersion=8.0
+      DATABASE_URL: mysql://root:root@127.0.0.1:3306/api?serverVersion=8.0
     services:
       mysql:
         image: mysql:8
         env:
           MYSQL_ROOT_PASSWORD: root
           MYSQL_PASSWORD: root
-          MYSQL_DATABASE: api_test
+          MYSQL_DATABASE: api
         ports:
           - 3306:3306
         options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
