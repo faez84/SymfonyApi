@@ -7,18 +7,18 @@ use Symfony\Component\HttpFoundation\Response;
 
 class UserControllerTest extends Api
 {
-    public function testAddUserForbidden(): void
+    public function testAddUserUnauthorized(): void
     {
         $this->client->request('POST', '/api/users', [], [], [
-            'HTTP_ACCEPT' => 'application/json'],
+            'HTTP_ACCEPT' => 'application/json',
+            'HTTP_AUTHORIZATION' => 'Bearer wrongToken'],
             json_encode([
                 'email' => 'test@email',
                 'password' => 'testpassword',
             ])
         );
 
-        $this->assertResponseStatusCodeSame(Response::HTTP_UNAUTHORIZED);
-        $this->assertResponseHeaderSame('Content-Type', 'application/json');
+        $this->assertProblemDetailsResponse(Response::HTTP_UNAUTHORIZED);
     }
     public function testAddUserInvalid(): void
     {
@@ -33,8 +33,7 @@ class UserControllerTest extends Api
         ]));
 
 
-        $this->assertResponseStatusCodeSame(Response::HTTP_UNPROCESSABLE_ENTITY);
-        $this->assertResponseHeaderSame('Content-Type', 'application/json');
+        $this->assertProblemDetailsResponse(Response::HTTP_UNPROCESSABLE_ENTITY);
         
         $this->assertJson($this->client->getResponse()->getContent());
 
@@ -59,7 +58,7 @@ class UserControllerTest extends Api
             'password' => '111111cxx',
         ]));
         $this->assertResponseIsSuccessful();
-        $this->assertResponseHeaderSame('Content-Type', 'application/json');
+        $this->assertJsonLikeResponse();
         $data = json_decode((string) $this->client->getResponse()->getContent(), true);
         $this->assertIsArray($data);
         $this->assertArrayHasKey('status', $data);

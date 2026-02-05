@@ -94,7 +94,6 @@
             "@s:phpqa:linter",
             "@s:phpqa:phpcs",
             "@s:phpqa:psalm",
-            "@s:phpqa:psalm:security",
             "@s:phpqa:phpstan"
         ]
     },
