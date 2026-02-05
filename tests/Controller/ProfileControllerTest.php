@@ -7,10 +7,11 @@ use Symfony\Component\HttpFoundation\Response;
 
 class ProfileControllerTest extends Api
 {
-    public function testGetUserProfileForbidden(): void
+    public function testGetUserProfileUnauthorized(): void
     {
         $this->client->request('GET', '/api/profile', [], [], [
             'HTTP_ACCEPT' => 'application/json',
+            'HTTP_AUTHORIZATION' => 'Bearer wrongToken',
         ]);
 
         $this->assertResponseStatusCodeSame(Response::HTTP_UNAUTHORIZED);

@@ -9,4 +9,5 @@ return [
     Faez84\DoctrinePerformanceGuardBundle\DoctrinePerformanceGuardBundle::class => ['all' => true],
     Lexik\Bundle\JWTAuthenticationBundle\LexikJWTAuthenticationBundle::class => ['all' => true],
     Symfony\Bundle\MonologBundle\MonologBundle::class => ['all' => true],
+    Faez84\ProblemDetailsBundle\ProblemDetailsBundle::class => ['all' => true],
 ];

@@ -7,10 +7,11 @@ use Symfony\Component\HttpFoundation\Response;
 
 class UserControllerTest extends Api
 {
-    public function testAddUserForbidden(): void
+    public function testAddUserUnauthorized(): void
     {
         $this->client->request('POST', '/api/users', [], [], [
-            'HTTP_ACCEPT' => 'application/json'],
+            'HTTP_ACCEPT' => 'application/json',
+            'HTTP_AUTHORIZATION' => 'Bearer wrongToken'],
             json_encode([
                 'email' => 'test@email',
                 'password' => 'testpassword',
