@@ -7,26 +7,25 @@ use Symfony\Component\HttpFoundation\Response;
 
 class ProfileControllerTest extends Api
 {
-    public function testGetUserProfileUnauthorized(): void
+    public function testGetUserProfileUnauthorizedWhenInvalidToken(): void
     {
         $this->client->request('GET', '/api/profile', [], [], [
             'HTTP_ACCEPT' => 'application/json',
             'HTTP_AUTHORIZATION' => 'Bearer wrongToken',
-        ]);
+        ],
+ 
+        );
 
-        $this->assertResponseStatusCodeSame(Response::HTTP_UNAUTHORIZED);
-        $this->assertResponseHeaderSame('Content-Type', 'application/json');
+        $this->assertProblemDetailsResponse(Response::HTTP_UNAUTHORIZED);
     }
 
-    public function testGetUserProfileUnauthorizedWhenNoToken(): void
+    public function testGetUserProfileForbiddenWhenNoToken(): void
     {
         $this->client->request('GET', '/api/profile', [], [], [
-                'HTTP_AUTHORIZATION' => 'Bearer '. 'invalidtoken',
             'HTTP_ACCEPT' => 'application/json',
         ]);
 
-        $this->assertResponseStatusCodeSame(Response::HTTP_UNAUTHORIZED);
-        $this->assertResponseHeaderSame('Content-Type', 'application/json');
+        $this->assertProblemDetailsResponse(Response::HTTP_FORBIDDEN);
     }
 
     public function testGetUserProfileSuccess(): void
@@ -34,12 +33,12 @@ class ProfileControllerTest extends Api
         $token = $this->getToken();
 
         $this->client->request('GET', '/api/profile', [], [], [
-            'HTTP_AUTHORIZATION' => 'Bearer '.$token,
+            'HTTP_AUTHORIZATION' => 'Bearer ' . $token,
             'HTTP_ACCEPT' => 'application/json',
         ]);
 
         $this->assertResponseIsSuccessful();
-        $this->assertResponseHeaderSame('content-type', 'application/json');
+        $this->assertJsonLikeResponse();
 
         $data = json_decode((string) $this->client->getResponse()->getContent(), true);
         $this->assertIsArray($data);
